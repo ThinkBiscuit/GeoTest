@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoTest", "GeoTest\GeoTest.csproj", "{F334C4D8-0769-4758-8748-E27C7C370511}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoTest.Tests", "GeoTest.Tests\GeoTest.Tests.csproj", "{616BCDB1-B41C-4B41-8016-95FD06416015}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PublishScripts", "PublishScripts", "{6A33BB05-3BCD-4E86-91FE-0D34EA7DC0A6}"
+	ProjectSection(SolutionItems) = preProject
+		PublishScripts\AzureVMPublishModule.psm1 = PublishScripts\AzureVMPublishModule.psm1
+		PublishScripts\Publish-WebApplicationVM.ps1 = PublishScripts\Publish-WebApplicationVM.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configurations", "{44A35E1A-CC3E-442F-A7D5-56FD7F729C6C}"
+	ProjectSection(SolutionItems) = preProject
+		PublishScripts\Configurations\GeoTest-WAWS-dev.json = PublishScripts\Configurations\GeoTest-WAWS-dev.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F334C4D8-0769-4758-8748-E27C7C370511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F334C4D8-0769-4758-8748-E27C7C370511}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F334C4D8-0769-4758-8748-E27C7C370511}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F334C4D8-0769-4758-8748-E27C7C370511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{616BCDB1-B41C-4B41-8016-95FD06416015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{616BCDB1-B41C-4B41-8016-95FD06416015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{616BCDB1-B41C-4B41-8016-95FD06416015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{616BCDB1-B41C-4B41-8016-95FD06416015}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{44A35E1A-CC3E-442F-A7D5-56FD7F729C6C} = {6A33BB05-3BCD-4E86-91FE-0D34EA7DC0A6}
+	EndGlobalSection
+EndGlobal
