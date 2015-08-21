@@ -44,3 +44,7 @@ C:\Development\GeoTest\GeoTest\bin\ServiceStack.Common.xml
 C:\Development\GeoTest\GeoTest\bin\ServiceStack.Interfaces.xml
 C:\Development\GeoTest\GeoTest\bin\ServiceStack.Redis.xml
 C:\Development\GeoTest\GeoTest\bin\ServiceStack.Text.xml
+C:\Development\GeoTest\GeoTest\bin\Dapper.dll
+C:\Development\GeoTest\GeoTest\bin\MySql.Data.dll
+C:\Development\GeoTest\GeoTest\bin\Dapper.pdb
+C:\Development\GeoTest\GeoTest\bin\Dapper.xml

@@ -36,3 +36,7 @@ C:\Development\GeoTest\GeoTest.Tests\bin\Release\System.Web.WebPages.Deployment.
 C:\Development\GeoTest\GeoTest.Tests\obj\Release\GeoTest.Tests.csprojResolveAssemblyReference.cache
 C:\Development\GeoTest\GeoTest.Tests\obj\Release\GeoTest.Tests.dll
 C:\Development\GeoTest\GeoTest.Tests\obj\Release\GeoTest.Tests.pdb
+C:\Development\GeoTest\GeoTest.Tests\bin\Release\MySql.Data.dll
+C:\Development\GeoTest\GeoTest.Tests\bin\Release\Dapper.dll
+C:\Development\GeoTest\GeoTest.Tests\bin\Release\Dapper.pdb
+C:\Development\GeoTest\GeoTest.Tests\bin\Release\Dapper.xml
