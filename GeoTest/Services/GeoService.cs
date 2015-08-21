@@ -26,7 +26,13 @@ namespace GeoTest.Services
 
         public object Post(SaveCoords request)
         {
-            return new {Success = _geoRepository.SaveCoords(request)};
+            int id;
+            var success = _geoRepository.SaveCoords(request, out id);
+
+            if (success)
+                request.ID = id;
+
+            return new {Success = success, Results = success ? request : null};
         }
 
         public object Get(GetAllCoords request)

@@ -20,11 +20,14 @@
             src="https://maps.googleapis.com/maps/api/js?callback=initialize">
 
 
-    
+
     </script>
 
     <script>
+        var infowindow;// = new google.maps.InfoWindow();
+
         function initialize() {
+            infowindow = new google.maps.InfoWindow();
             var mapDiv = document.getElementById('map-canvas');
             var map = new google.maps.Map(mapDiv, {
                 center: new google.maps.LatLng(37.4419, -122.1419),
@@ -32,56 +35,62 @@
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             });
 
-            $.ajax({
-                type: "GET",
-                url: "/api/Geo/GetAll",
-                dataType: "json",
-                success: function (result) {
-
-                    for (var i = 0; i < result.Results.length; i++) {
-                        var point = result.Results[i];
-                   
-                           // position: new google.maps.LatLng(point.Lat, point.Long),
-                        //  map: map,
-
-            
-                        radius = new google.maps.Circle({
-                            map: map,
-                            radius: 100,
-                            center: new google.maps.LatLng(point.Lat, point.Long),
-                            fillColor: '#777',
-                            fillOpacity: 0.1,
-                            strokeColor: '#AA0000',
-                            strokeOpacity: 0.8,
-                            strokeWeight: 2,
-                            draggable: false, // Dragable
-                            editable: false // Resizable
-                        });
-                    }
-
-                },
-                error: function (request, status, error) {
-                    $('#coordsLog').append('Could not fetch coords!');
-                }
-            });
-
-            google.maps.event.addListener(map, "click", function(event) {
-                var latitude = event.latLng.lat();
-                var longitude = event.latLng.lng();
-                // console.log(latitude + ', ' + longitude);
-
-                radius = new google.maps.Circle({
+            function createMarker(latlon, title, iwContent, id) {
+                /*   var marker = new google.maps.Marker({
+                    position: latlon,
+                    title: title,
+                    map: map
+                });*/
+                var radius = new google.maps.Circle({
                     map: map,
                     radius: 100,
-                    center: event.latLng,
+                    position: latlon,
+                    center: latlon,
                     fillColor: '#777',
                     fillOpacity: 0.1,
                     strokeColor: '#AA0000',
                     strokeOpacity: 0.8,
                     strokeWeight: 2,
                     draggable: false, // Dragable
-                    editable: false // Resizable
+                    editable: false, // Resizable
+                    id: id
                 });
+
+                google.maps.event.addListener(radius, 'click', function() {
+                    infowindow.setContent(iwContent);
+                    infowindow.open(map, radius);
+                });
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "/api/Geo/GetAll",
+                dataType: "json",
+                success: function(result) {
+
+                    for (var i = 0; i < result.Results.length; i++) {
+                        var point = result.Results[i];
+
+
+                        var markerLatlng = new google.maps.LatLng(point.Lat, point.Long);
+                        var title = "Point Details";
+                        var iwContent = "Point id: " + point.ID;
+
+                        createMarker(markerLatlng, title, iwContent, point.id);
+                    }
+
+
+                },
+                error: function(request, status, error) {
+                    $('#coordsLog').append('Could not fetch coords!');
+                }
+            });
+
+
+            google.maps.event.addListener(map, "click", function(event) {
+                var latitude = event.latLng.lat();
+                var longitude = event.latLng.lng();
+                // console.log(latitude + ', ' + longitude)
 
                 // Center of map
                 //  map.panTo(new google.maps.LatLng(latitude, longitude));
@@ -90,45 +99,37 @@
                 SaveCoords.Long = longitude;
                 SaveCoords.Lat = latitude;
 
-            $.ajax({
-                type: "POST",
-                url: "/api/Geo/Save",
-                data: SaveCoords,
-                dataType: "json",
-                success: function(result) {
-                    $('#coordsLog').append('latlng ' + latitude + ", " + longitude + "<br/>");
-                },
-                error: function(request, status, error) {
-                    $('#coordsLog').append('Error: Coords not saved.');
-                }
-            });
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Geo/Save",
+                    data: SaveCoords,
+                    dataType: "json",
+                    success: function(result) {
 
+                        if (result.Success) {
+                            SaveCoords = result.Results;
 
-        }); //end addListener
+                   
+                                var markerLatlng = new google.maps.LatLng(SaveCoords.Lat, SaveCoords.Long);
+                                var title = "Point Details";
+                                var iwContent = "Point id: " + SaveCoords.ID;
 
+                                createMarker(markerLatlng, title, iwContent, SaveCoords.id);
+                            
 
-        /*   google.maps.event.addListener(map, 'bounds_changed', function () {
-                var lat1 = 37.41463623043073;
-                var lat2 = 37.46915383933881;
-                var lng1 = -122.1848153442383;
-                var lng2 = -122.09898465576174;
+                            $('#coordsLog').append('latlng ' + latitude + ", " + longitude + "<br/>");
+                        } else {
+                            $('#coordsLog').append('Error: Coords not saved.<br/>');
+                        }
 
-                var rectangle = new google.maps.Polygon({
-                    paths: [
-                      new google.maps.LatLng(lat1, lng1),
-                      new google.maps.LatLng(lat2, lng1),
-                      new google.maps.LatLng(lat2, lng2),
-                      new google.maps.LatLng(lat1, lng2)
-                    ],
-                    strokeOpacity: 0,
-                    fillOpacity: 0,
-                    map: map
+                    },
+                    error: function(request, status, error) {
+                        $('#coordsLog').append('Error: Coords not saved.<br/>');
+                    }
                 });
+                
 
-                google.maps.event.addListener(rectangle, 'click', function (args) {
-                    $('#coordsLog').append('latlng ' + args.latLng + "<br/>");
-                });
-            });*/
-    }
+            }); //end addListener
+        }
     </script>
 }
