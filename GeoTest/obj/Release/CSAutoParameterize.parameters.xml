@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <parameter name="GeoTest-Web.config Connection String" description="GeoTest Connection String used in web.config by the application to access the database." defaultValue="Database=GeoTest;Data Source=eu-cdbr-azure-north-d.cloudapp.net;User Id=ba77ad7651bb88;Password=5a95d8bd" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="E:\\Development\\GeoTest\\GeoTest\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='GeoTest']/@connectionString" />
+    <parameterEntry kind="XmlFile" scope="C:\\Development\\GeoTest\\GeoTest\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='GeoTest']/@connectionString" />
   </parameter>
 </parameters>
