@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Transactions;
 using Dapper;
+using GeoTest.Helpers;
 using GeoTest.Models;
 using MySql.Data.MySqlClient;
 
@@ -42,10 +43,13 @@ namespace GeoTest.DataAccess
 
         public IEnumerable<GeoPoint> GetLocalCoords(GeoPoint geo)
         {
+            var bounding = GeoCalculations.GetBoundingBoxMiles(new GeoCalculations.MapPoint {Latitude = geo.Lat, Longitude = geo.Long}, geo.Distance);
+
             using (var cn = new MySqlConnection(_connectionString))
             {//TODO: need to bound query with oblong coords to limit DB index lookup
-                const string sql = "SELECT *,3956 * 2 * ASIN(SQRT(POWER(SIN((@Lat - `Lat`) * PI() / 180 / 2), 2) + COS(@Lat * PI() / 180) * COS(`Lat` *PI() / 180) * POWER(SIN((@Long - `Long`) * PI() / 180 / 2), 2) )) AS distance FROM `geopoints` HAVING distance < @Distance; ";
-                return cn.Query<GeoPoint>(sql, geo);
+                cn.Open();
+                const string sql = "SELECT *,3956 * 2 * ASIN(SQRT(POWER(SIN((@Lat - `Lat`) * PI() / 180 / 2), 2) + COS(@Lat * PI() / 180) * COS(`Lat` *PI() / 180) * POWER(SIN((@Long - `Long`) * PI() / 180 / 2), 2) )) AS distance FROM `geopoints` WHERE `Long` BETWEEN @Long1 AND @long2 AND `Lat` BETWEEN @Lat1 AND @Lat2 HAVING distance < @Distance; ";
+                return cn.Query<GeoPoint>(sql, new {@Distance= geo.Distance, @Lat = geo.Lat, @Long = geo.Long, @Long1 = bounding.MinPoint.Longitude, @Long2 = bounding.MaxPoint.Longitude, @Lat1 = bounding.MinPoint.Latitude, @Lat2 = bounding.MaxPoint.Latitude});
             }
         }
 
