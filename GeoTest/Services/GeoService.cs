@@ -40,6 +40,10 @@ namespace GeoTest.Services
         public object Delete(DeleteCoord request)
         {
             var success = _geoRepository.DeleteCoord(request.ID);
+
+            if (success)
+                PushPinRemovedNotification(request.ID);
+
             return new {Success = success};
         }
 
@@ -79,7 +83,7 @@ namespace GeoTest.Services
             hub.Clients.Group("GeoPlacements").pinPlaced(point);
         }
 
-        private void PushPinRemovedNotification(GeoPoint point)
+        private void PushPinRemovedNotification(int point)
         {
             var hub = GlobalHost.ConnectionManager.GetHubContext<GeoHub>();
 
