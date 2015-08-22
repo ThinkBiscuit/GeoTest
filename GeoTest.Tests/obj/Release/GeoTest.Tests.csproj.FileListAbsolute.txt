@@ -84,3 +84,12 @@ E:\Development\GeoTest\GeoTest.Tests\obj\Release\GeoTest.Tests.csprojResolveAsse
 E:\Development\GeoTest\GeoTest.Tests\obj\Release\GeoTest.Tests.dll
 E:\Development\GeoTest\GeoTest.Tests\obj\Release\GeoTest.Tests.pdb
 C:\Development\GeoTest\GeoTest.Tests\bin\Release\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
+E:\Development\GeoTest\GeoTest.Tests\bin\Release\Microsoft.Owin.dll
+E:\Development\GeoTest\GeoTest.Tests\bin\Release\Owin.dll
+E:\Development\GeoTest\GeoTest.Tests\bin\Release\Microsoft.AspNet.SignalR.Core.dll
+E:\Development\GeoTest\GeoTest.Tests\bin\Release\Newtonsoft.Json.dll
+E:\Development\GeoTest\GeoTest.Tests\bin\Release\Microsoft.Owin.Security.dll
+E:\Development\GeoTest\GeoTest.Tests\bin\Release\Microsoft.Owin.xml
+E:\Development\GeoTest\GeoTest.Tests\bin\Release\Microsoft.AspNet.SignalR.Core.xml
+E:\Development\GeoTest\GeoTest.Tests\bin\Release\Newtonsoft.Json.xml
+E:\Development\GeoTest\GeoTest.Tests\bin\Release\Microsoft.Owin.Security.xml

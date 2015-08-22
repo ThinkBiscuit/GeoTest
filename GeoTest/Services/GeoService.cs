@@ -1,5 +1,7 @@
 ﻿using GeoTest.DataAccess;
+using GeoTest.Hubs;
 using GeoTest.Models;
+using Microsoft.AspNet.SignalR;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 
@@ -47,7 +49,10 @@ namespace GeoTest.Services
             var success = _geoRepository.SaveCoords(request, out id);
 
             if (success)
+            {
                 request.ID = id;
+                PushPinDropNotification(request);
+            }
 
             return new {Success = success, Results = success ? request : null};
         }
@@ -65,6 +70,20 @@ namespace GeoTest.Services
             var result = _geoRepository.GetLocalCoords(request);
 
             return new { Success = result != null, Results = result };
+        }
+
+        private void PushPinDropNotification(GeoPoint point)
+        {
+            var hub = GlobalHost.ConnectionManager.GetHubContext<GeoHub>();
+
+            hub.Clients.Group("GeoPlacements").pinPlaced(point);
+        }
+
+        private void PushPinRemovedNotification(GeoPoint point)
+        {
+            var hub = GlobalHost.ConnectionManager.GetHubContext<GeoHub>();
+
+            hub.Clients.Group("GeoPlacements").pinRemoved(point);
         }
     }
 }

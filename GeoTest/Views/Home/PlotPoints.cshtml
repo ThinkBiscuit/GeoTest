@@ -3,7 +3,7 @@
     ViewBag.Title = "Plot Points";
 }
 
-<h2>Index</h2>
+<h2>Plot Points</h2>
 
 <div id="map-canvas" style="width: 800px; height: 600px;">
 
@@ -127,11 +127,11 @@
                             SaveCoords = result.Results;
 
                    
-                                var markerLatlng = new google.maps.LatLng(SaveCoords.Lat, SaveCoords.Long);
-                                var title = "Point Details";
-                                var iwContent = "<div>Point id '" + SaveCoords.ID + "'</div><div><button onclick='javascript:doDelete(" + SaveCoords.ID + ");'>Delete</button></div>";
+                            var markerLatlng = new google.maps.LatLng(SaveCoords.Lat, SaveCoords.Long);
+                            var title = "Point Details";
+                            var iwContent = "<div>Point id '" + SaveCoords.ID + "'</div><div><button onclick='javascript:doDelete(" + SaveCoords.ID + ");'>Delete</button></div>";
 
-                                createMarker(markerLatlng, title, iwContent, SaveCoords.ID);
+                            createMarker(markerLatlng, title, iwContent, SaveCoords.ID);
                             
 
                             $('#coordsLog').append('latlng ' + latitude + ", " + longitude + "<br/>");

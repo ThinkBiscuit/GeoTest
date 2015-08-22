@@ -98,3 +98,16 @@ E:\Development\GeoTest\GeoTest\bin\System.Web.Mvc.xml
 E:\Development\GeoTest\GeoTest\obj\Debug\GeoTest.csprojResolveAssemblyReference.cache
 E:\Development\GeoTest\GeoTest\obj\Debug\GeoTest.dll
 E:\Development\GeoTest\GeoTest\obj\Debug\GeoTest.pdb
+E:\Development\GeoTest\GeoTest\bin\Microsoft.AspNet.SignalR.Core.dll
+E:\Development\GeoTest\GeoTest\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+E:\Development\GeoTest\GeoTest\bin\Microsoft.Owin.dll
+E:\Development\GeoTest\GeoTest\bin\Microsoft.Owin.Host.SystemWeb.dll
+E:\Development\GeoTest\GeoTest\bin\Microsoft.Owin.Security.dll
+E:\Development\GeoTest\GeoTest\bin\Newtonsoft.Json.dll
+E:\Development\GeoTest\GeoTest\bin\Owin.dll
+E:\Development\GeoTest\GeoTest\bin\Microsoft.AspNet.SignalR.Core.xml
+E:\Development\GeoTest\GeoTest\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+E:\Development\GeoTest\GeoTest\bin\Microsoft.Owin.xml
+E:\Development\GeoTest\GeoTest\bin\Microsoft.Owin.Host.SystemWeb.xml
+E:\Development\GeoTest\GeoTest\bin\Microsoft.Owin.Security.xml
+E:\Development\GeoTest\GeoTest\bin\Newtonsoft.Json.xml

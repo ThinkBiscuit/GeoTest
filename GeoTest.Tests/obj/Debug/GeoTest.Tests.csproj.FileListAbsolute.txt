@@ -84,3 +84,12 @@ E:\Development\GeoTest\GeoTest.Tests\bin\Debug\System.Web.WebPages.Deployment.xm
 E:\Development\GeoTest\GeoTest.Tests\obj\Debug\GeoTest.Tests.csprojResolveAssemblyReference.cache
 E:\Development\GeoTest\GeoTest.Tests\obj\Debug\GeoTest.Tests.dll
 E:\Development\GeoTest\GeoTest.Tests\obj\Debug\GeoTest.Tests.pdb
+E:\Development\GeoTest\GeoTest.Tests\bin\Debug\Microsoft.Owin.dll
+E:\Development\GeoTest\GeoTest.Tests\bin\Debug\Owin.dll
+E:\Development\GeoTest\GeoTest.Tests\bin\Debug\Microsoft.AspNet.SignalR.Core.dll
+E:\Development\GeoTest\GeoTest.Tests\bin\Debug\Newtonsoft.Json.dll
+E:\Development\GeoTest\GeoTest.Tests\bin\Debug\Microsoft.Owin.Security.dll
+E:\Development\GeoTest\GeoTest.Tests\bin\Debug\Microsoft.Owin.xml
+E:\Development\GeoTest\GeoTest.Tests\bin\Debug\Microsoft.AspNet.SignalR.Core.xml
+E:\Development\GeoTest\GeoTest.Tests\bin\Debug\Newtonsoft.Json.xml
+E:\Development\GeoTest\GeoTest.Tests\bin\Debug\Microsoft.Owin.Security.xml
