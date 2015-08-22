@@ -13,5 +13,10 @@ namespace GeoTest.Controllers
         {
             return View();
         }
+
+        public ActionResult Distance()
+        {
+            return View();
+        }
     }
 }

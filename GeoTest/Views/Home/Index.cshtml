@@ -1,15 +1,15 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Plot Points";
 }
 
 <h2>Index</h2>
 
-<div id="map-canvas" style="width: 400px; height: 400px; float: left;">
+<div id="map-canvas" style="width: 800px; height: 600px;">
 
 </div>
 
-<div id="coordsLog" style="margin-left: 10px;">
+<div id="coordsLog" style="width: 800px; height: 600px; overflow-x: auto; overflow-y: no-display;">
     
 </div>
 
@@ -25,40 +25,57 @@
 
     <script>
         var infowindow;// = new google.maps.InfoWindow();
+        var markers = {};
+
+        function doDelete(id) {
+
+            $.ajax({
+                type: "DELETE",
+                url: "/api/Geo/Delete?ID=" + id,
+                dataType: "json",
+                success: function (result) {
+
+                    if (result.Success) {
+                        var marker = markers[id]; // find the marker by given id
+
+                        //alert(markers.length);
+                        marker.setMap(null);
+                        delete markers[id];
+                    }
+                },
+                error: function (request, status, error) {
+                    $('#coordsLog').append('Could not fetch coords!');
+                }
+            });
+
+        }
 
         function initialize() {
             infowindow = new google.maps.InfoWindow();
             var mapDiv = document.getElementById('map-canvas');
             var map = new google.maps.Map(mapDiv, {
-                center: new google.maps.LatLng(37.4419, -122.1419),
+                center: new google.maps.LatLng(52.450464959706345, -1.9369840621948242),
                 zoom: 13,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             });
 
+
+
             function createMarker(latlon, title, iwContent, id) {
-                /*   var marker = new google.maps.Marker({
+
+                var marker = new google.maps.Marker({
                     position: latlon,
-                    title: title,
-                    map: map
-                });*/
-                var radius = new google.maps.Circle({
                     map: map,
-                    radius: 100,
-                    position: latlon,
-                    center: latlon,
-                    fillColor: '#777',
-                    fillOpacity: 0.1,
-                    strokeColor: '#AA0000',
-                    strokeOpacity: 0.8,
-                    strokeWeight: 2,
-                    draggable: false, // Dragable
-                    editable: false, // Resizable
-                    id: id
+                    id: id,
+                    icon: 'http://maps.google.com/mapfiles/kml/pal3/icon18.png',
+                    animation: google.maps.Animation.DROP
                 });
 
-                google.maps.event.addListener(radius, 'click', function() {
+                markers[id] = marker;
+
+                google.maps.event.addListener(marker, 'click', function () {
                     infowindow.setContent(iwContent);
-                    infowindow.open(map, radius);
+                    infowindow.open(map, marker);
                 });
             }
 
@@ -74,9 +91,9 @@
 
                         var markerLatlng = new google.maps.LatLng(point.Lat, point.Long);
                         var title = "Point Details";
-                        var iwContent = "Point id: " + point.ID;
+                        var iwContent = "<div>Point id '" + point.ID + "'</div><div><button onclick='javascript:doDelete(" + point.ID + ");'>Delete</button></div>";
 
-                        createMarker(markerLatlng, title, iwContent, point.id);
+                        createMarker(markerLatlng, title, iwContent, point.ID);
                     }
 
 
@@ -112,9 +129,9 @@
                    
                                 var markerLatlng = new google.maps.LatLng(SaveCoords.Lat, SaveCoords.Long);
                                 var title = "Point Details";
-                                var iwContent = "Point id: " + SaveCoords.ID;
+                                var iwContent = "<div>Point id '" + SaveCoords.ID + "'</div><div><button onclick='javascript:doDelete(" + SaveCoords.ID + ");'>Delete</button></div>";
 
-                                createMarker(markerLatlng, title, iwContent, SaveCoords.id);
+                                createMarker(markerLatlng, title, iwContent, SaveCoords.ID);
                             
 
                             $('#coordsLog').append('latlng ' + latitude + ", " + longitude + "<br/>");

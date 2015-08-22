@@ -1,0 +1,179 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Distance</h2>
+Radius (miles) <input id="Radius" type="text"/>
+<div id="map-canvas" style="width: 800px; height: 600px;">
+
+</div>
+
+<div id="coordsLog" style="width: 800px; height: 600px; overflow-x: auto; overflow-y: no-display;">
+
+</div>
+
+@section Scripts
+{
+    <script>
+        var dist = 1;
+        $(document).ready(function () {
+
+            $("#Radius").numeric();
+            $("#Radius").val(1);
+            $("#Radius").change(function() {
+                dist = $("#Radius").val();
+            });
+        });
+    </script>
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?callback=initialize">
+
+
+
+    </script>
+
+    <script>
+        var infowindow; // = new google.maps.InfoWindow();
+        var markers = {};
+        var myMarkers = {};
+        function initialize() {
+            infowindow = new google.maps.InfoWindow();
+            var mapDiv = document.getElementById('map-canvas');
+            var map = new google.maps.Map(mapDiv, {
+                center: new google.maps.LatLng(52.450464959706345, -1.9369840621948242),
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+
+            function createMarker(latlon, title, iwContent, id, icon, distance) {
+
+
+                if (id === "MyPosition" && myMarkers[id] != null) {
+
+                    var myMarker = myMarkers[id]; // find the marker by given id
+
+                    //alert(markers.length);
+                    myMarker.setMap(null);
+                    delete markers[id];
+
+
+                    myMarker = myMarkers["MyDistanceRad"]; // find the marker by given id
+
+                    //alert(markers.length);
+                    myMarker.setMap(null);
+                    delete myMarkers["MyDistanceRad"];
+                }
+
+                if (id === "MyPosition") {
+
+                    var radius = new google.maps.Circle({
+                        radius: distance * 1609.344, //convert to miles
+                        center: latlon,
+                        fillColor: "#ff69b4",
+                        fillOpacity: 0.3,
+                        strokeOpacity: 0.0,
+                        strokeWeight: 0,
+                        map: map
+                    });
+
+                    myMarkers["MyDistanceRad"] = radius;
+                }
+
+                var marker = new google.maps.Marker({
+                    position: latlon,
+                    map: map,
+                    id: id,
+                    icon: icon == null ? 'http://maps.google.com/mapfiles/kml/pal3/icon18.png' : icon,
+                    animation: google.maps.Animation.DROP
+                });
+
+                if (id === "MyPosition") {
+                    myMarkers[id] = marker;
+                } else {
+                    markers[id] = marker;
+                }
+                
+
+                if (id !== "MyPosition") {
+                    google.maps.event.addListener(marker, 'click', function() {
+                        infowindow.setContent(iwContent);
+                        infowindow.open(map, marker);
+                    });
+                }
+
+
+            }
+
+            google.maps.event.addListener(map, "click", function(event) {
+                var latitude = event.latLng.lat();
+                var longitude = event.latLng.lng();
+                // console.log(latitude + ', ' + longitude)
+
+                // Center of map
+                //  map.panTo(new google.maps.LatLng(latitude, longitude));
+                var GetCoords = {};
+
+                GetCoords.Long = longitude;
+                GetCoords.Lat = latitude;
+                GetCoords.Distance = dist;
+
+
+                $.ajax({
+                    type: "GET",
+                    url: "/api/Geo/GetLocal",
+                    data: GetCoords,
+                    dataType: "json",
+                    success: function(result) {
+
+                        if (result.Success) {
+                            //  console.log("success");
+                            // if (markers.length > 0) {
+                            jQuery.each(markers, function(index, item) {
+                                // var item = markers[index];
+                                item.setMap(null);
+                                // console.log(index);
+                            });
+                            //   }
+                            markers = {};
+
+                            var markerLatlng = new google.maps.LatLng(GetCoords.Lat, GetCoords.Long);
+                            var title = "";//"Point Details";
+                            var iwContent = "";//"<div>Point id '" + GetCoords.ID + "'</div><div><button onclick='javascript:doDelete(" + SaveCoords.ID + ");'>Delete</button></div>";
+
+
+                            createMarker(markerLatlng, title, iwContent, "MyPosition", 'http://maps.google.com/mapfiles/kml/pal4/icon47.png', GetCoords.Distance);
+
+
+
+                            for (var i = 0; i < result.Results.length; i++) {
+                                var point = result.Results[i];
+
+
+                                markerLatlng = new google.maps.LatLng(point.Lat, point.Long);
+                                title = "Point Details";
+                                iwContent = "<div>Point id '" + point.ID + "'</div><div>Distance from me: " + point.Distance + "</div><div><button onclick='javascript:doDelete(" + point.ID + ");'>Delete</button></div>";
+
+                                createMarker(markerLatlng, title, iwContent, point.ID);
+                            }
+
+
+                        }
+
+                    },
+                    error: function(request, status, error) {
+                        $('#coordsLog').append('Could not fetch coords!');
+                    }
+                });
+
+
+
+                $('#coordsLog').append('latlng ' + latitude + ", " + longitude + "<br/>");
+
+
+            }); //end addListener
+        }
+    </script>
+}

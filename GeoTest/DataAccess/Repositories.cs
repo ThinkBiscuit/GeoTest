@@ -40,6 +40,25 @@ namespace GeoTest.DataAccess
             }
         }
 
+        public IEnumerable<GeoPoint> GetLocalCoords(GeoPoint geo)
+        {
+            using (var cn = new MySqlConnection(_connectionString))
+            {//TODO: need to bound query with oblong coords to limit DB index lookup
+                const string sql = "SELECT *,3956 * 2 * ASIN(SQRT(POWER(SIN((@Lat - `Lat`) * PI() / 180 / 2), 2) + COS(@Lat * PI() / 180) * COS(`Lat` *PI() / 180) * POWER(SIN((@Long - `Long`) * PI() / 180 / 2), 2) )) AS distance FROM `geopoints` HAVING distance < @Distance; ";
+                return cn.Query<GeoPoint>(sql, geo);
+            }
+        }
+
+        public bool DeleteCoord(int id)
+        {
+            using (var cn = new MySqlConnection(_connectionString))
+            {
+                const string sql = "DELETE FROM `geopoints` WHERE `ID`=@id;";
+
+                return cn.Execute(sql, new {ID = id}) > 0;
+            }
+        }
+
         public IEnumerable<GeoPoint> GetAllCoords()
         {
             using (var cn = new MySqlConnection(_connectionString))

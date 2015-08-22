@@ -83,3 +83,4 @@ E:\Development\GeoTest\GeoTest.Tests\bin\Release\System.Web.WebPages.Deployment.
 E:\Development\GeoTest\GeoTest.Tests\obj\Release\GeoTest.Tests.csprojResolveAssemblyReference.cache
 E:\Development\GeoTest\GeoTest.Tests\obj\Release\GeoTest.Tests.dll
 E:\Development\GeoTest\GeoTest.Tests\obj\Release\GeoTest.Tests.pdb
+C:\Development\GeoTest\GeoTest.Tests\bin\Release\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml

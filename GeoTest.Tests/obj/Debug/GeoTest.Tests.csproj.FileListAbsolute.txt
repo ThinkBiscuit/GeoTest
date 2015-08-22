@@ -40,3 +40,4 @@ C:\Development\GeoTest\GeoTest.Tests\bin\Debug\System.Web.WebPages.Deployment.xm
 C:\Development\GeoTest\GeoTest.Tests\obj\Debug\GeoTest.Tests.csprojResolveAssemblyReference.cache
 C:\Development\GeoTest\GeoTest.Tests\obj\Debug\GeoTest.Tests.dll
 C:\Development\GeoTest\GeoTest.Tests\obj\Debug\GeoTest.Tests.pdb
+C:\Development\GeoTest\GeoTest.Tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml

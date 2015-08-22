@@ -10,9 +10,20 @@ namespace GeoTest.Services
     {
     }
 
+    [Route("/Geo/GetLocal")]
+    public class GetCoords : GeoPoint
+    {
+    }
+
     [Route("/Geo/GetAll")]
     public class GetAllCoords
     {     
+    }
+
+    [Route("/Geo/Delete")]
+    public class DeleteCoord
+    {
+        public int ID { get; set; }
     }
 
     public class GeoService : Service
@@ -22,6 +33,12 @@ namespace GeoTest.Services
         public GeoService()
         {
             _geoRepository = new GeoRepository();
+        }
+
+        public object Delete(DeleteCoord request)
+        {
+            var success = _geoRepository.DeleteCoord(request.ID);
+            return new {Success = success};
         }
 
         public object Post(SaveCoords request)
@@ -39,6 +56,14 @@ namespace GeoTest.Services
         {
 
             var result = _geoRepository.GetAllCoords();
+            return new { Success = result != null, Results = result };
+        }
+
+        public object Get(GetCoords request)
+        {
+
+            var result = _geoRepository.GetLocalCoords(request);
+
             return new { Success = result != null, Results = result };
         }
     }
