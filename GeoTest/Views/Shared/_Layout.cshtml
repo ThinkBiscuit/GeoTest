@@ -17,11 +17,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Geo Mobile Test", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <span class="navbar-brand">Geo Mobile Test</span>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @Html.ActionLink("Plot Points", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Plot Points", "PlotPoints", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Plot Points Sockets", "PlotPointsSockets", "Home", new { area = "" }, new { @class = "navbar-brand" })
                     @Html.ActionLink("Distance", "Distance", "Home", new { area = "" }, new { @class = "navbar-brand" })
                 </ul>
             </div>

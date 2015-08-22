@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewBag.Title = "Plot Points";
+}
+
+<h2>Plot Points</h2>
+
+<div id="map-canvas" style="width: 800px; height: 600px;">
+
+</div>
+
+<div id="coordsLog" style="width: 800px; height: 600px; overflow-x: auto; overflow-y: no-display;">
+    
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+<script src="~/signalr/hubs" type="text/javascript"></script>
+<script>$(function () {
+        var geoHub = $.connection.GeoHub;
+        $.connection.hub.start().done(function () {
+            geoHub.server.joinGroup("GeoPlacements");
+        });
+
+        geoHub.client.pinPlaced = function (data) {
+            alert(data.ID);
+        };
+});
+</script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?callback=initialize">
+
+
+
+    </script>
+
+    <script>
+        var infowindow;// = new google.maps.InfoWindow();
+        var markers = {};
+
+        function doDelete(id) {
+
+            $.ajax({
+                type: "DELETE",
+                url: "/api/Geo/Delete?ID=" + id,
+                dataType: "json",
+                success: function (result) {
+
+                    if (result.Success) {
+                        var marker = markers[id]; // find the marker by given id
+
+                        //alert(markers.length);
+                        marker.setMap(null);
+                        delete markers[id];
+                    }
+                },
+                error: function (request, status, error) {
+                    $('#coordsLog').append('Could not fetch coords!');
+                }
+            });
+
+        }
+
+        function initialize() {
+            infowindow = new google.maps.InfoWindow();
+            var mapDiv = document.getElementById('map-canvas');
+            var map = new google.maps.Map(mapDiv, {
+                center: new google.maps.LatLng(52.450464959706345, -1.9369840621948242),
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+
+
+            function createMarker(latlon, title, iwContent, id) {
+
+                var marker = new google.maps.Marker({
+                    position: latlon,
+                    map: map,
+                    id: id,
+                    icon: 'http://maps.google.com/mapfiles/kml/pal3/icon18.png',
+                    animation: google.maps.Animation.DROP
+                });
+
+                markers[id] = marker;
+
+                google.maps.event.addListener(marker, 'click', function () {
+                    infowindow.setContent(iwContent);
+                    infowindow.open(map, marker);
+                });
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "/api/Geo/GetAll",
+                dataType: "json",
+                success: function(result) {
+
+                    for (var i = 0; i < result.Results.length; i++) {
+                        var point = result.Results[i];
+
+
+                        var markerLatlng = new google.maps.LatLng(point.Lat, point.Long);
+                        var title = "Point Details";
+                        var iwContent = "<div>Point id '" + point.ID + "'</div><div><button onclick='javascript:doDelete(" + point.ID + ");'>Delete</button></div>";
+
+                        createMarker(markerLatlng, title, iwContent, point.ID);
+                    }
+
+
+                },
+                error: function(request, status, error) {
+                    $('#coordsLog').append('Could not fetch coords!');
+                }
+            });
+
+
+            google.maps.event.addListener(map, "click", function(event) {
+                var latitude = event.latLng.lat();
+                var longitude = event.latLng.lng();
+                // console.log(latitude + ', ' + longitude)
+
+                // Center of map
+                //  map.panTo(new google.maps.LatLng(latitude, longitude));
+                var SaveCoords = {};
+
+                SaveCoords.Long = longitude;
+                SaveCoords.Lat = latitude;
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Geo/Save",
+                    data: SaveCoords,
+                    dataType: "json",
+                    success: function(result) {
+
+                        if (result.Success) {
+                            SaveCoords = result.Results;
+
+                   
+                                var markerLatlng = new google.maps.LatLng(SaveCoords.Lat, SaveCoords.Long);
+                                var title = "Point Details";
+                                var iwContent = "<div>Point id '" + SaveCoords.ID + "'</div><div><button onclick='javascript:doDelete(" + SaveCoords.ID + ");'>Delete</button></div>";
+
+                                createMarker(markerLatlng, title, iwContent, SaveCoords.ID);
+                            
+
+                            $('#coordsLog').append('latlng ' + latitude + ", " + longitude + "<br/>");
+                        } else {
+                            $('#coordsLog').append('Error: Coords not saved.<br/>');
+                        }
+
+                    },
+                    error: function(request, status, error) {
+                        $('#coordsLog').append('Error: Coords not saved.<br/>');
+                    }
+                });
+                
+
+            }); //end addListener
+        }
+    </script>
+}
