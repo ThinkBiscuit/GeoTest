@@ -53,6 +53,16 @@ namespace GeoTest.DataAccess
             }
         }
 
+        public IEnumerable<GeoPoint> GetBoundedCoords(BoundryPoints points)
+        {
+            using (var cn = new MySqlConnection(_connectionString))
+            {
+                const string sql = "SELECT * FROM `geopoints` WHERE `Long` BETWEEN @BottomLong AND @TopLong AND `Lat` BETWEEN @BottomLat AND @TopLat;";
+
+                return cn.Query<GeoPoint>(sql, points);
+            }
+        }
+
         public bool DeleteCoord(int id)
         {
             using (var cn = new MySqlConnection(_connectionString))

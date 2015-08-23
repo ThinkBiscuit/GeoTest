@@ -184,6 +184,7 @@
     </Compile>
     <Compile Include="Helpers\GeoCalculations.cs" />
     <Compile Include="Hubs\GeoHub.cs" />
+    <Compile Include="Models\BoundryPoints.cs" />
     <Compile Include="Models\GeoPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\GeoService.cs" />
@@ -202,6 +203,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Distance.cshtml" />
     <Content Include="Views\Home\PlotPointsSockets.cshtml" />
+    <Content Include="Views\Home\PlotPointsMapBounds.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

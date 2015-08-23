@@ -17,6 +17,12 @@ namespace GeoTest.Services
     {
     }
 
+    [Route("/Geo/GetBounded")]
+    public class GetBoundedCoords : BoundryPoints
+    {
+        
+    }
+
     [Route("/Geo/GetAll")]
     public class GetAllCoords
     {     
@@ -65,6 +71,13 @@ namespace GeoTest.Services
         {
 
             var result = _geoRepository.GetAllCoords();
+            return new { Success = result != null, Results = result };
+        }
+
+        public object Get(GetBoundedCoords request)
+        {
+
+            var result = _geoRepository.GetBoundedCoords(request);
             return new { Success = result != null, Results = result };
         }
 

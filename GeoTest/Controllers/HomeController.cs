@@ -14,6 +14,11 @@ namespace GeoTest.Controllers
             return View();
         }
 
+        public ActionResult PlotPointsMapBounds()
+        {
+            return View();
+        }
+
         public ActionResult PlotPointsSockets()
         {
             return View();

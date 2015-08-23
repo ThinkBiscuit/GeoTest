@@ -1,0 +1,171 @@
+﻿
+@{
+    ViewBag.Title = "Plot Points";
+}
+
+<h2>Plot Points</h2>
+
+<div id="map-canvas" style="width: 800px; height: 600px;">
+
+</div>
+
+<div id="coordsLog" style="width: 800px; height: 600px; overflow-x: auto; overflow-y: no-display;">
+    
+</div>
+
+@section Scripts
+{
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?callback=initialize">
+
+
+
+    </script>
+
+    <script>
+        var infowindow; // = new google.maps.InfoWindow();
+        var markers = {};
+
+        function doDelete(id) {
+
+            $.ajax({
+                type: "DELETE",
+                url: "/api/Geo/Delete?ID=" + id,
+                dataType: "json",
+                success: function(result) {
+
+                    if (result.Success) {
+                        var marker = markers[id]; // find the marker by given id
+
+                        //alert(markers.length);
+                        marker.setMap(null);
+                        delete markers[id];
+                    }
+                },
+                error: function(request, status, error) {
+                    $('#coordsLog').append('Could not fetch coords!');
+                }
+            });
+
+        }
+
+        function initialize() {
+            infowindow = new google.maps.InfoWindow();
+            var mapDiv = document.getElementById('map-canvas');
+            var map = new google.maps.Map(mapDiv, {
+                center: new google.maps.LatLng(52.450464959706345, -1.9369840621948242),
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            google.maps.event.addListener(map, "idle", function() {
+                // send the new bounds back to your server
+                var lat0 = map.getBounds().getNorthEast().lat();
+                var lng0 = map.getBounds().getNorthEast().lng();
+                var lat1 = map.getBounds().getSouthWest().lat();
+                var lng1 = map.getBounds().getSouthWest().lng();
+
+                var root = {};
+                root.Top = {};
+                root.Bottom = {};
+
+                root.Top.Lat = lat0;
+                root.Top.Long = lng0;
+
+                root.Bottom.Lat = lat1;
+                root.Bottom.Long = lng1;
+
+                //{"Top":{"ID":0,"Long":4,"Lat":3,"Distance":0},"Bottom":{"ID":0,"Long":2,"Lat":1,"Distance":0}}
+                $.ajax({
+                    type: "GET",
+                    url: "/api/Geo/GetBounded",
+                    dataType: "json",
+                    data: { "TopLat": lat0, "TopLong": lng0, "BottomLat": lat1, "BottomLong": lng1 },
+                    success: function(result) {
+
+                        for (var i = 0; i < result.Results.length; i++) {
+                            var point = result.Results[i];
+
+                            if (markers[point.ID] == null) {
+                                var markerLatlng = new google.maps.LatLng(point.Lat, point.Long);
+                                var title = "Point Details";
+                                var iwContent = "<div>Point id '" + point.ID + "'</div><div><button onclick='javascript:doDelete(" + point.ID + ");'>Delete</button></div>";
+
+                                createMarker(markerLatlng, title, iwContent, point.ID);
+                            }
+                        }
+
+
+                    },
+                    error: function(request, status, error) {
+                        $('#coordsLog').append('Could not fetch coords!');
+                    }
+                });
+            });
+
+            function createMarker(latlon, title, iwContent, id) {
+
+                var marker = new google.maps.Marker({
+                    position: latlon,
+                    map: map,
+                    id: id,
+                    icon: 'http://maps.google.com/mapfiles/kml/pal3/icon18.png',
+                    animation: google.maps.Animation.DROP
+                });
+
+                markers[id] = marker;
+
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.setContent(iwContent);
+                    infowindow.open(map, marker);
+                });
+            }
+
+
+            google.maps.event.addListener(map, "click", function(event) {
+                var latitude = event.latLng.lat();
+                var longitude = event.latLng.lng();
+                // console.log(latitude + ', ' + longitude)
+
+                // Center of map
+                //  map.panTo(new google.maps.LatLng(latitude, longitude));
+                var SaveCoords = {};
+
+                SaveCoords.Long = longitude;
+                SaveCoords.Lat = latitude;
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Geo/Save",
+                    data: SaveCoords,
+                    dataType: "json",
+                    success: function(result) {
+
+                        if (result.Success) {
+                            SaveCoords = result.Results;
+
+
+                            var markerLatlng = new google.maps.LatLng(SaveCoords.Lat, SaveCoords.Long);
+                            var title = "Point Details";
+                            var iwContent = "<div>Point id '" + SaveCoords.ID + "'</div><div><button onclick='javascript:doDelete(" + SaveCoords.ID + ");'>Delete</button></div>";
+
+                            createMarker(markerLatlng, title, iwContent, SaveCoords.ID);
+
+
+                            $('#coordsLog').append('latlng ' + latitude + ", " + longitude + "<br/>");
+                        } else {
+                            $('#coordsLog').append('Error: Coords not saved.<br/>');
+                        }
+
+                    },
+                    error: function(request, status, error) {
+                        $('#coordsLog').append('Error: Coords not saved.<br/>');
+                    }
+                });
+
+
+            }); //end addListener
+        }
+    </script>
+}
